@@ -4,18 +4,11 @@ import Card from "../../components/card";
 import NavigationBar from "../../components/navBar";
 import { useEffect } from "react";
 
-// const products = [
-//   { title: 'Cabbage', id: 1 },
-//   { title: 'Garlic', id: 2 },
-//   { title: 'Apple', id: 3 },
-//   { title: 'samsung', id: 4 },
-//   { title: 'xiaomi', id: 5 },
-// ];
 
 function MainPage() {
   const [products, setProducts] = React.useState([]);
   const [mail, setMail] = React.useState(localStorage.getItem("mail"));
-
+const [produceToAccept, setProduceToAccept] = React.useState([]);
   
 
   useEffect(() => {
@@ -23,6 +16,15 @@ function MainPage() {
       .then((res) => res.json())
       .then((result) => {
         setProducts(result);
+        console.log(result);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch(`http://localhost:8081/Granted/toAccept/${mail}`)
+      .then((res) => res.json())
+      .then((result) => {
+        setProduceToAccept(result);
         console.log(result);
       });
   }, []);
@@ -35,6 +37,13 @@ function MainPage() {
           <Card key={item.id} name={item.account. name} />
         ))}
       </div>
+
+      <div className="card--elements">
+        {produceToAccept.map((item) => (
+          <Card key={item.id} name={item.account. name + " test"} />
+        ))}
+        </div>  
+
     </div>
   );
 }
